@@ -72,7 +72,7 @@ the file in it are merged alphabetically.
 
 An article looks like that:
 
-~~~
+~~~~
 My article title
 ================
 
@@ -85,11 +85,11 @@ Another subtitle
 ----------------
 
 Blabla...
-~~~
+~~~~
 
 The simplest template you can defined to build your article:
 
-~~~
+~~~~
 \documentclass{article}
 
 \title{$title}
@@ -100,19 +100,16 @@ The simplest template you can defined to build your article:
 
 $body
 \end{document}
-~~~
+~~~~
 
 ### Writing a report
 
-~~~
+~~~~
 Title 1
 =======
 
 Title 1.1
 ---------
-
-Title 1.1.1
-~~~~~~~~~~~
 
 Blabla
 
@@ -127,7 +124,7 @@ Title 2
 Blabla
 ~~~~
 
-~~~
+~~~~
 \documentclass{report}
 
 \title{THETITLE}
@@ -138,7 +135,7 @@ Blabla
 
 $body
 \end{document}
-~~~
+~~~~
 
 You noticed that the title variable changed. This new variable is deduced from
 the filename or directory (camel case is transformed: TechnicalNote becomes Technical Note).
