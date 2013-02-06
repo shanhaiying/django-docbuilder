@@ -38,13 +38,11 @@ def replace(search, replace, filename):
 
 
 def generate_tex(infile, outfile, template, title, beamer):
-    with open(infile) as rst:
-        with open(outfile, 'w+') as tex:
-            tex.write(publish_file(rst, writer_name='latex',
-                settings_overrides={
-                    'template': template,
-                    'anchor': False,
-                }))
+    publish_file(source_path=infile,
+                 destination_path=outfile,
+                 writer_name='latex',
+                 settings_overrides={'template': template,
+                                     'anchor': False})
     replace('\\\\phantomsection%\\n  \\n', '', outfile)
     replace('\\n\\n}', '}', outfile)
     replace('includegraphics{', 'includegraphics\[width=\\\\linewidth\]{', outfile)
