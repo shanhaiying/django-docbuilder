@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Django-docbuilder by jexhson</title>
+    <title>django-docbuilder by jexhson</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-dark.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -17,7 +17,7 @@
   <body>
 
       <header>
-        <h1>Django-docbuilder</h1>
+        <h1>django-docbuilder</h1>
         <p>Build git hosted reStructuredText documentation into PDF (LaTeX) from a Django app</p>
       </header>
 
@@ -43,7 +43,7 @@
 into LaTeX through you Django app.</p>
 
 <h2>
-<a id="motivations" class="anchor" href="#motivations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Motivations</h2>
+<a id="motivations" class="anchor" href="#motivations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Motivations</h2>
 
 <p>Most of the time when writing documentation I don't need all the LaTeX complex
 things, just the gorgeous rendering.</p>
@@ -66,14 +66,14 @@ where I can easily define the resulting template and where the sources are
 pulled from a git repository.</p>
 
 <h2>
-<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requirements</h2>
 
 <p>To run the app, you need <code>docutils</code> and <code>django</code> python package (pip FTW). </p>
 
 <p>In addition, the <code>pdflatex</code> and <code>git</code> programme should be installed on the system.</p>
 
 <h2>
-<a id="technical-choices" class="anchor" href="#technical-choices" aria-hidden="true"><span class="octicon octicon-link"></span></a>Technical choices</h2>
+<a id="technical-choices" class="anchor" href="#technical-choices" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Technical choices</h2>
 
 <p>As I was unable to find a working python Markdown to LaTeX parser, I switched
 to reStructuredText which is quite the same think but have a great support
@@ -84,7 +84,7 @@ If you know a good Markdown parser, let me know ;)</p>
 can be used, a command line interface or what ever you want.</p>
 
 <h2>
-<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h2>
 
 <p>As usual, remember to add <code>docbuilder</code> to your django module list.</p>
 
@@ -93,7 +93,121 @@ Checkout other settings.</p>
 
 <p>Some generic urls are provided in <code>urls.py</code>.</p>
 
-<p>Documents and template</p>
+<h2>
+<a id="documents-and-template" class="anchor" href="#documents-and-template" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documents and template</h2>
+
+<p>Three types of Documents can be used:</p>
+
+<ul>
+<li>Articles: a title and multiple subtitles / paragraphs.</li>
+<li>Reports: multiple titles with subtitles and paragraphs.</li>
+<li>Slides: a beamer presentation</li>
+</ul>
+
+<p>The build document can be either a document or a repository. In this case, all
+the file in it are merged alphabetically.</p>
+
+<h3>
+<a id="write-an-article" class="anchor" href="#write-an-article" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Write an article</h3>
+
+<p>An article looks like that:</p>
+
+<pre><code>My article title
+================
+
+A subtitle
+----------
+
+Blabla
+
+Another subtitle
+----------------
+
+Blabla...
+</code></pre>
+
+<p>The simplest template you can defined to build your article:</p>
+
+<pre><code>\documentclass{article}
+
+\title{$title}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+$body
+\end{document}
+</code></pre>
+
+<h3>
+<a id="writing-a-report" class="anchor" href="#writing-a-report" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Writing a report</h3>
+
+<pre><code>Title 1
+=======
+
+Title 1.1
+---------
+
+Blabla
+
+Title 1.2
+---------
+
+Blabla
+
+Title 2
+=======
+
+Blabla
+</code></pre>
+
+<pre><code>\documentclass{report}
+
+\title{THETITLE}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+$body
+\end{document}
+</code></pre>
+
+<p>You noticed that the title variable changed. This new variable is deduced from
+the filename or directory (camel case is transformed: TechnicalNote becomes Technical Note).</p>
+
+<p>You can also set dynamically the title with a title query string like
+<code>?title=Hello</code> or hard code it to the view via the title parameter </p>
+
+<h3>
+<a id="write-a-presentation" class="anchor" href="#write-a-presentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Write a presentation</h3>
+
+<p>The structure of a presentation is the same as the article. The main article
+will represent the presentation title.</p>
+
+<p>Each subtitle will becomes the slide title and the content between those each slide contents.</p>
+
+<p>A minimalistic beamer template looks like:</p>
+
+<pre><code>\documentclass{beamer}
+
+\title{$title}
+\author{Myself}
+\date{\today}
+
+\begin{document}
+\begin{frame}[t,plain]
+ \titlepage
+ $body
+\end{frame}
+\end{document}
+</code></pre>
+
+<h2>
+<a id="interested-to-use-it" class="anchor" href="#interested-to-use-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Interested to use it?</h2>
+
+<p>Bug reports, feature/pull request, comments, suggestions welcome!</p>
       </section>
       <footer>
         <p>Project maintained by <a href="https://github.com/jexhson">jexhson</a></p>
